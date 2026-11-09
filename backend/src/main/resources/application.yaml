@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: motorbike-insurance
+
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=motorbike_insurance;encrypt=false;trustServerCertificate=true
+    username: sa
+    password: '123'
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServerDialect
+        format_sql: true
+        jdbc:
+          batch_size: 20
+
+#Bật log hiển thị giá trị truyền vào tham số (?) trong SQL
+logging:
+  level:
+      org.hibernate.orm.jdbc.bind: TRACE
+
+#JWT
+jwt:
+  signer-key: '8d97f2da61b6dde0d062f55113d215cabd33a855534946934dc79b7554f71edc'
+  expiration: 86400000 #ms
+  valid-duration: 36000 #ms
+  refreshable-duration: 36000 #ms
