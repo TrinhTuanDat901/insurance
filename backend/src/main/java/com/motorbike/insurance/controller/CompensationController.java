@@ -19,6 +19,12 @@ public class CompensationController {
 
     ICompensationService service;
 
+    @GetMapping("/my-compensations")
+    public ApiResponse<List<CompensationResponse>> getMyCompensations() {
+        return ApiResponse.<List<CompensationResponse>>builder()
+                .code(1000).result(service.getMyCompensations()).build();
+    }
+
     //viewAllCompensation(): List<Compensation> & searchCompensationDetail(string status)
     @GetMapping("/all")
     public ApiResponse<List<CompensationResponse>> viewAllCompensation(

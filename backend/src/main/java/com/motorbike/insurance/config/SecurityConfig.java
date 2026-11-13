@@ -1,5 +1,6 @@
 package com.motorbike.insurance.config;
 
+import org.springframework.security.config.Customizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +22,11 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS = {
-            "/users", "/auth/login", "/auth/introspect", "/auth/logout", "/auth/refresh"
+            "/users", "/users/register", "/auth/login", "/auth/introspect", "/auth/logout", "/auth/refresh",
+            "/contracts/all", "/contracts/{contractId}", "/contracts/create", "/contracts/update/{contractId}",
+            "/compensations/all", "/compensations/{compensationId}", "/compensations/create", "/compensations/update/{compensationId}",
+            "/api/research-agent/**", "/api/ai/**",
+            "/payments/**"
     };
 
     private final String[] ADMIN_GET_ENDPOINTS = {"/users/all", "/roles/all", "/permissions/all"};
@@ -39,8 +44,11 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS)
+        http.cors(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.OPTIONS, PUBLIC_ENDPOINTS)
                 .permitAll()
+                .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                 .requestMatchers(HttpMethod.POST, ADMIN_POST_ENDPOINTS)
                 .hasRole("STAFF")
                 .requestMatchers(HttpMethod.GET, ADMIN_GET_ENDPOINTS)

@@ -20,6 +20,12 @@ public class ContractController {
 
     IContractService service;
 
+    @GetMapping("/my-contracts")
+    public ApiResponse<List<ContractResponse>> getMyContracts() {
+        return ApiResponse.<List<ContractResponse>>builder()
+                .code(1000).result(service.getMyContracts()).build();
+    }
+
     //viewAllContract
     @GetMapping("/all")
     public ApiResponse<List<ContractResponse>> viewAllContract() {

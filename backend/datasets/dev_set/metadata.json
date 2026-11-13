@@ -1,0 +1,10 @@
+{
+  "splitName": "dev_set",
+  "totalSamples": 850,
+  "classDistribution": {
+    "NORMAL_PATTERN": 380,
+    "HIGH_FREQ_SPIKE": 290,
+    "SENSOR_DROPOUT": 180
+  },
+  "recordingEnvironment": "Field Deployment Production (High Thermal & Cross-Channel Interference)"
+}

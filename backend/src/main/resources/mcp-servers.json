@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "brave-search": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "-e", "BRAVE_API_KEY", "mcp/brave-search"],
+      "description": "External web search via Docker MCP Gateway for Embabel CoreToolGroups.WEB"
+    },
+    "arxiv-research": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-arxiv"],
+      "description": "Search academic ML papers for CNN regularization and domain shift mitigation"
+    }
+  }
+}

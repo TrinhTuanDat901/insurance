@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface IContractService {
+    List<ContractResponse> getMyContracts();
+
     List<ContractResponse> getAllContract();
 
     ContractResponse getContractDetail(Integer contractId);

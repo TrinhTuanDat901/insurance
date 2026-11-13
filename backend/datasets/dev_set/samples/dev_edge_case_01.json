@@ -1,0 +1,15 @@
+{
+  "sampleId": "dev-edge-042",
+  "groundTruthLabel": "SENSOR_DROPOUT",
+  "values": [
+    0.89,
+    0.02,
+    0.01,
+    0.94,
+    0.0,
+    0.87,
+    0.03,
+    0.91
+  ],
+  "notes": "Transient burst noise masking sensor dropout in field environment"
+}

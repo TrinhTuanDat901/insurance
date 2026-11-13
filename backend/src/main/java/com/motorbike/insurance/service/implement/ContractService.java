@@ -269,4 +269,12 @@ public class ContractService implements IContractService {
                 .qrCodeData(card != null ? card.getQrCodeData() : null)
                 .build();
     }
+
+    @Override
+    public List<ContractResponse> getMyContracts() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        return contractRepository.findByUser_UserId(currentUser.getUserId()).stream()
+                .map(this::toContractResponse).collect(Collectors.toList());
+    }
 }

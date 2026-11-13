@@ -33,6 +33,14 @@ public class CompensationService implements ICompensationService {
     PaymentRepository paymentRepository;
     StaffRepository staffRepository;
 
+    @Override
+    public List<CompensationResponse> getMyCompensations() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepo.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        return compensationRepo.findByUser_UserId(currentUser.getUserId()).stream()
+                .map(this::toCompensationResponse).collect(Collectors.toList());
+    }
+
     //searchCompensationDetail(string status)
     @Override
     @PreAuthorize("hasRole('STAFF')")

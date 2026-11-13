@@ -3,6 +3,7 @@ package com.motorbike.insurance.controller;
 import com.motorbike.insurance.dto.request.RegisterRequest;
 import com.motorbike.insurance.dto.request.UpdateRequest;
 import com.motorbike.insurance.dto.response.ApiResponse;
+import com.motorbike.insurance.dto.response.UserHistoryResponse;
 import com.motorbike.insurance.dto.response.UserResponse;
 import com.motorbike.insurance.service.IUserService;
 import lombok.AccessLevel;
@@ -48,7 +49,7 @@ public class UserController {
     @GetMapping("/all")
     public ApiResponse<List<UserResponse>> getAllUsers() {
         ApiResponse<List<UserResponse>> response = new ApiResponse<>();
-        response.setResult(IUserService.getAllUsers());
+        response.setResult(IUserService.getAllUsersExceptStaff());
         response.setMessage("Users retrieved successfully");
         return response;
     }
@@ -59,5 +60,32 @@ public class UserController {
         IUserService.deleteUser(userId);
         response.setMessage("User deleted successfully");
         return response;
+    }
+
+    @GetMapping("/my-info")
+    public ApiResponse<UserResponse> getMyInfo() {
+        return ApiResponse.<UserResponse>builder()
+                .code(1000)
+                .result(IUserService.getMyInfo())
+                .message("Current user info retrieved successfully")
+                .build();
+    }
+
+    @GetMapping("/my-history")
+    public ApiResponse<UserHistoryResponse> getMyHistory() {
+        return ApiResponse.<UserHistoryResponse>builder()
+                .code(1000)
+                .result(IUserService.getMyHistory())
+                .message("Current user history retrieved successfully")
+                .build();
+    }
+
+    @GetMapping("/history/{userId}")
+    public ApiResponse<UserHistoryResponse> getUserHistory(@PathVariable Integer userId) {
+        return ApiResponse.<UserHistoryResponse>builder()
+                .code(1000)
+                .result(IUserService.getUserHistory(userId))
+                .message("User history retrieved successfully")
+                .build();
     }
 }

@@ -5,6 +5,8 @@ import com.motorbike.insurance.dto.response.CompensationResponse;
 import java.util.List;
 
 public interface ICompensationService {
+    List<CompensationResponse> getMyCompensations();
+
     List<CompensationResponse> getAllCompensation(String status);
 
     CompensationResponse getCompensationDetail(Integer compensationId);

@@ -1,0 +1,10 @@
+{
+  "splitName": "train_set",
+  "totalSamples": 4200,
+  "classDistribution": {
+    "NORMAL_PATTERN": 2600,
+    "HIGH_FREQ_SPIKE": 1100,
+    "SENSOR_DROPOUT": 500
+  },
+  "recordingEnvironment": "Controlled Lab Baseline (Low Ambient Noise)"
+}

@@ -1,13 +1,16 @@
+server:
+  port: 8080
+
 spring:
+  config:
+    import: optional:classpath:application-secrets.yaml
   application:
     name: motorbike-insurance
-
   datasource:
     url: jdbc:sqlserver://localhost:1433;databaseName=motorbike_insurance;encrypt=false;trustServerCertificate=true
     username: sa
     password: '123'
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-
   jpa:
     hibernate:
       ddl-auto: none
@@ -19,15 +22,71 @@ spring:
         format_sql: true
         jdbc:
           batch_size: 20
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
 
-#Bật log hiển thị giá trị truyền vào tham số (?) trong SQL
+# Bật log hiển thị giá trị truyền vào tham số (?) trong SQL
 logging:
   level:
-      org.hibernate.orm.jdbc.bind: TRACE
+    org.hibernate.orm.jdbc.bind: TRACE
 
-#JWT
+# JWT
 jwt:
   signer-key: '8d97f2da61b6dde0d062f55113d215cabd33a855534946934dc79b7554f71edc'
   expiration: 86400000 #ms
   valid-duration: 36000 #ms
   refreshable-duration: 36000 #ms
+
+embabel:
+  models:
+    default-llm: gpt-4.1-mini
+  agent:
+    platform:
+      name: motorbike-insurance-agent-platform
+      description: Motorbike Insurance & CNN Dataset Diagnostic Agent Platform
+      models:
+        diagnostician: gpt-4.1-mini
+        researcher: gpt-4.1-nano
+        synthesizer: gpt-4.1
+
+research:
+  agent:
+    max-concurrency: 8
+    output-directory: ./outputs/reports
+    allowed-origins:
+      - http://localhost:5173
+    diagnostician-model: gpt-4.1-mini
+    researcher-model: gpt-4.1-nano
+    synthesizer-model: gpt-4.1
+    diagnostician-role: Senior ML & CNN Dataset Diagnostician
+    diagnostician-goal: >
+      Analyze Convolutional Neural Network feature activations, spatial maps, and evaluate
+      statistical distribution shifts between train_set and dev_set splits.
+    diagnostician-backstory: >
+      You are an expert deep learning engineer specializing in convolutional architectures,
+      activation map interpretation, covariate shift detection, and hard-negative error analysis.
+    researcher-role: Principal AI Literature & Domain Researcher
+    researcher-goal: >
+      Use Agentic RAG (ToolishRag) and external search tools to investigate the root causes of
+      CNN anomalies, dataset drift, and domain-specific edge cases discovered in the dev_set.
+    researcher-backstory: >
+      You systematically query indexed research papers, technical documentation, and web sources,
+      always grounding your explanations in retrieved evidence and exact citations.
+
+  cnn:
+    model:
+      architecture-name: ConvNet-1D-2D-Hybrid
+      weights-path: ./datasets/artifacts/cnn_feature_extractor.onnx
+      input-channels: 3
+      conv1-filters: 32
+      conv2-filters: 64
+      kernel-size: 3
+      stride: 1
+      padding: 1
+      pooling-size: 2
+      embedding-dimension: 128
+      confidence-threshold: 0.78
+      drift-kl-threshold: 0.15
+      batch-size: 32

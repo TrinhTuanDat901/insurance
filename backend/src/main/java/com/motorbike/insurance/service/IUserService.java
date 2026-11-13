@@ -2,6 +2,7 @@ package com.motorbike.insurance.service;
 
 import com.motorbike.insurance.dto.request.RegisterRequest;
 import com.motorbike.insurance.dto.request.UpdateRequest;
+import com.motorbike.insurance.dto.response.UserHistoryResponse;
 import com.motorbike.insurance.dto.response.UserResponse;
 
 import java.util.List;
@@ -14,7 +15,13 @@ public interface IUserService {
 
     Optional<UserResponse> getById(Integer userId);
 
-    List<UserResponse> getAllUsers();
+    List<UserResponse> getAllUsersExceptStaff();
 
     void deleteUser(Integer userId);
+
+    UserResponse getMyInfo();
+
+    UserHistoryResponse getMyHistory();
+
+    UserHistoryResponse getUserHistory(Integer userId);
 }
