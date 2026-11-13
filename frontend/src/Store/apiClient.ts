@@ -61,6 +61,7 @@ export * from './authClient';
 export * from './userApi';
 export * from './contractApi';
 export * from './compensationApi';
+export * from './vehicleApi';
 export type {
   UserResponse,
   ContractResponse,

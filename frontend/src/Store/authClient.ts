@@ -18,8 +18,7 @@ export const authApi = {
       email: decoded?.sub || email,
       fullName: isStaff ? 'Chuyên viên Nghiệp vụ' : email.split('@')[0],
       phone: '0903 128 456',
-      role: isStaff ? 'STAFF' : 'CUSTOMER',
-      membershipTier: isStaff ? 'PLATINUM' : 'GOLD',
+      role: isStaff ? 'STAFF' : 'CUSTOMER'
     };
   },
 

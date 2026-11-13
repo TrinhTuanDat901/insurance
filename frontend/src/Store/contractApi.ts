@@ -5,6 +5,9 @@ import { request } from './apiClient';
 export type { ContractResponse };
 
 export const contractApi = {
+  getMyContracts: async (): Promise<ContractResponse[]> =>
+    (await request<ContractResponse[]>('/contracts/my-contracts', { method: 'GET' })).result || [],
+
   viewAllContracts: async (): Promise<ContractResponse[]> =>
     (await request<ContractResponse[]>('/contracts/all', { method: 'GET' })).result || [],
 

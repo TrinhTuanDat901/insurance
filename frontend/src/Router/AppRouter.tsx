@@ -1,22 +1,18 @@
 // File: src/Router/AppRouter.tsx
 import React, { useState, useEffect } from 'react';
 import Navbar from '../View/shared/Navbar';
+import { UserResponse } from '../types/index';
+import AiChatbot from '../View/shared/AiChatbot';
 import LandingPage from '../View/Homepage/LandingPage';
 import LoginPage from '../View/Auth/LoginPage';
 import ForgotPasswordModal from '../View/Auth/ForgotPasswordModal';
 import UserDashBoard from '../View/UserDashBoard/UserDashBoard';
 import StaffDashboard from '../View/StaffDashboard/StaffDashboard';
 import { COLORS } from '../Store/colors';
-import { authApi, TokenStorage, decodeJwt } from '../Store/apiClient';
-import {
-  INITIAL_USER,
-  INITIAL_POLICIES,
-  INITIAL_CLAIMS,
-  INITIAL_INCIDENTS,
-  INITIAL_INVOICES,
-  USER_VEHICLES,
-} from '../Store/mockData';
-import { UserAccount, InsurancePolicy, CompensationClaim, VehicleItem } from '../types';
+import { authApi } from '../Store/authClient';
+import { TokenStorage, decodeJwt } from '../Store/apiClient';
+import { INITIAL_USER } from '../Store/mockData';
+import { UserAccount } from '../types/index';
 
 export default function AppRouter() {
   const [currentView, setCurrentView] = useState<'landing' | 'auth' | 'profile' | 'staff'>('landing');
@@ -24,11 +20,9 @@ export default function AppRouter() {
   const [user, setUser] = useState<UserAccount | null>(null);
   const [isForgotOpen, setIsForgotOpen] = useState(false);
   const [enrollModalPackageId, setEnrollModalPackageId] = useState<string | null>(null);
-
-  const [policies, setPolicies] = useState<InsurancePolicy[]>(INITIAL_POLICIES);
-  const [claims, setClaims] = useState<CompensationClaim[]>(INITIAL_CLAIMS);
-  const [vehicles, setVehicles] = useState<VehicleItem[]>(USER_VEHICLES);
-
+  const [openClaimFromAi, setOpenClaimFromAi] = useState(false);
+  const [userResponse, setUserResponse] = useState<UserResponse | null>(null);
+  
   useEffect(() => {
     const savedToken = TokenStorage.getToken();
     if (!savedToken) return;
@@ -37,12 +31,11 @@ export default function AppRouter() {
         const decoded = decodeJwt(savedToken);
         const isStaff = decoded?.scope?.includes('ROLE_STAFF') ?? false;
         setUser({
-          id: decoded?.jti || 'usr_restored',
+          id: decoded?.jti || '1',
           email: decoded?.sub || '',
           fullName: isStaff ? 'Chuyên viên Nghiệp vụ' : decoded?.sub || 'Khách hàng',
-          phone: '0903 128 456',
-          role: isStaff ? 'STAFF' : 'CUSTOMER',
-          membershipTier: isStaff ? 'PLATINUM' : 'GOLD',
+          phone: '0984 123 456', // phone: userResponse?.phone || '',
+          role: isStaff ? 'STAFF' : 'CUSTOMER'
         });
       } else {
         TokenStorage.clearToken();
@@ -108,20 +101,10 @@ export default function AppRouter() {
         {currentView === 'profile' && (
           <UserDashBoard
             user={user || INITIAL_USER}
-            policies={policies}
-            claims={claims}
-            incidents={INITIAL_INCIDENTS}
-            invoices={INITIAL_INVOICES}
-            vehicles={vehicles}
-            onAddNewClaim={(c) => setClaims((prev) => [c, ...prev])}
-            onAddNewVehicle={(v) => setVehicles((prev) => [...prev, v])}
-            onRenewPolicy={(id) =>
-              setPolicies((prev) =>
-                prev.map((p) => (p.id === id ? { ...p, status: 'ACTIVE', statusLabel: 'Đang có hiệu lực' } : p))
-              )
-            }
             onNavigateStaff={() => setCurrentView('staff')}
             onBackToLanding={() => setCurrentView('landing')}
+            externalOpenClaimModal={openClaimFromAi}
+            onClearExternalClaimModal={() => setOpenClaimFromAi(false)}
           />
         )}
 
@@ -134,7 +117,57 @@ export default function AppRouter() {
         )}
       </main>
 
+      {/* Tích hợp AI Chatbot nổi (Tự động chuyển đổi chế độ USER AI và STAFF MODE) */}
+      <AiChatbot
+        user={user}
+        currentView={currentView}
+        onNavigateView={(view) => setCurrentView(view)}
+        onOpenClaimModal={() => {
+          setCurrentView('profile');
+          setOpenClaimFromAi(true);
+        }}
+      />
+
       {isForgotOpen && <ForgotPasswordModal onClose={() => setIsForgotOpen(false)} />}
+
+      {enrollModalPackageId && (
+        <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 ${COLORS.OVERLAY_BACKDROP} ${COLORS.TEXT_MAIN}`}>
+          <div className={`rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border relative space-y-4 ${COLORS.SURFACE_WHITE}`}>
+            <h3 className={`text-xl font-extrabold ${COLORS.TEXT_PRIMARY}`}>
+              Đăng Ký Tham Gia Gói Bảo Hiểm
+            </h3>
+            <p className="text-xs text-black/80 leading-relaxed">
+              Để kích hoạt gói bảo hiểm và nhận chứng nhận điện tử có mã QR tích hợp, vui lòng đăng nhập hoặc tạo tài khoản mới.
+            </p>
+            <div className="flex flex-col gap-2.5 pt-2">
+              <button
+                onClick={() => {
+                  setEnrollModalPackageId(null);
+                  handleNavigateAuth('login');
+                }}
+                className={`w-full py-3 rounded-xl font-bold text-xs shadow-sm transition-all ${COLORS.BTN_PRIMARY}`}
+              >
+                Đăng nhập để tiếp tục
+              </button>
+              <button
+                onClick={() => {
+                  setEnrollModalPackageId(null);
+                  handleNavigateAuth('register');
+                }}
+                className={`w-full py-2.5 rounded-xl font-bold text-xs transition-colors ${COLORS.BTN_NEUTRAL}`}
+              >
+                Tạo tài khoản mới
+              </button>
+              <button
+                onClick={() => setEnrollModalPackageId(null)}
+                className="w-full py-2 text-black/60 hover:text-black text-xs font-semibold"
+              >
+                Hủy bỏ
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

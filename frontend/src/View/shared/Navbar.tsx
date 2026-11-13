@@ -146,7 +146,7 @@ export default function Navbar({
               <span>← Về Trang chủ</span>
             </button>
             <span className="text-black/40">|</span>
-            <span className={`${COLORS.TEXT_PRIMARY} font-extrabold`}>
+            <span className={`font-extrabold`}>
               {currentView === 'staff' ? 'Khu Vực Nghiệp Vụ Chuyên Viên' : 'Khu Vực Hồ Sơ Khách Hàng'}
             </span>
           </div>
@@ -163,8 +163,8 @@ export default function Navbar({
                   }`}
                 >
                   <User className="w-3.5 h-3.5" />
-                  <span>Nghiệp vụ & Hồ sơ Staff</span>
-                  <ChevronRight className="w-3.5 h-3.5 opacity-80" />
+                    <span>Hồ sơ Nhân Viên</span>
+                    <ChevronRight className="w-3.5 h-3.5 opacity-80" />
                 </button>
               ) : (
                 <button

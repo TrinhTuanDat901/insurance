@@ -48,7 +48,7 @@ export default function LoginPage({
   const [lastName, setLastName] = useState('');
   const [firstName, setFirstName] = useState('');
   const [phone, setPhone] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  // const [confirmPassword, setConfirmPassword] = useState('');
 
   const [errorMsg, setErrorMsg] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -103,10 +103,10 @@ export default function LoginPage({
         );
         return;
       }
-      if (confirmPassword !== password) {
-        setErrorMsg('Mật khẩu xác nhận không khớp.');
-        return;
-      }
+      // if (confirmPassword !== password) {
+      //   setErrorMsg('Mật khẩu xác nhận không khớp.');
+      //   return;
+      // }
 
       setIsSubmitting(true);
       try {
@@ -372,7 +372,7 @@ export default function LoginPage({
                 </div>
               </div>
 
-              {mode === 'register' && (
+              {/* {mode === 'register' && (
                 <div>
                   <label className="block text-xs font-bold text-black mb-1">
                     xác nhận mật khẩu
@@ -388,7 +388,7 @@ export default function LoginPage({
                     className="w-full h-[48px] px-4 rounded-xl bg-[#EAF0F7] text-black placeholder-black/40 text-xs font-medium focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#4461F2] transition-all"
                   />
                 </div>
-              )}
+              )} */}
 
               {/* Forgot link in Login mode */}
               {mode === 'login' && (

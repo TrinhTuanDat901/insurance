@@ -8,9 +8,56 @@ export interface UserAccount {
   phone: string;
   role: UserRole;
   avatarUrl?: string;
-  citizenId?: string;
-  address?: string;
-  membershipTier?: 'STANDARD' | 'SILVER' | 'GOLD' | 'PLATINUM';
+}
+
+// Thêm vào cuối file src/types/index.ts
+export interface UserHistoryResponse {
+  contracts: {
+    contractId: number;
+    contractCode: string;
+    plateNumber: string;
+    vehicleName: string;
+    packageName: string;
+    startDate: string;
+    endDate: string;
+    premiumAmount: number;
+    status: string;
+  }[];
+  payments: {
+    paymentId: number;
+    contractCode: string;
+    amount: number;
+    paymentDate: string;
+    paymentMethod: string;
+    status: string;
+    transactionRef: string | null;
+  }[];
+  accidents: {
+    accidentId: number;
+    contractCode: string;
+    plateNumber: string;
+    accidentDate: string;
+    location: string | null;
+    description: string | null;
+    status: string;
+  }[];
+  punishments: {
+    punishmentId: number;
+    contractCode: string;
+    punishmentDate: string;
+    reason: string;
+    fineAmount: number | null;
+    status: string;
+  }[];
+  compensations: {
+    compensationId: number;
+    contractCode: string;
+    requestDate: string;
+    requestedAmount: number;
+    approvedAmount: number | null;
+    description: string | null;
+    status: string;
+  }[];
 }
 
 export interface ApiResponse<T> {

@@ -13,9 +13,6 @@ export const INITIAL_USER: UserAccount = {
   fullName: 'Nguyễn Văn An',
   phone: '0918 456 789',
   role: 'CUSTOMER',
-  citizenId: '001095018294',
-  address: 'Số 45 Đường Hoàng Diệu, Phường Điện Biên, Quận Ba Đình, Hà Nội',
-  membershipTier: 'GOLD',
   avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80'
 };
 
@@ -24,10 +21,7 @@ export const STAFF_USER: UserAccount = {
   email: 'staff@gmail.com',
   fullName: 'Nguyễn Minh Quân',
   phone: '0903 128 456',
-  role: 'STAFF',
-  citizenId: '001095018294',
-  address: 'Phòng Nghiệp vụ & Bồi thường MotoInsure, Hà Nội',
-  membershipTier: 'PLATINUM'
+  role: 'STAFF'
 };
 
 export const MOTORBIKE_PACKAGES = [
